@@ -8,6 +8,7 @@ class AddBusInformation extends StatefulWidget {
 }
 
 class _AddBusInformationState extends State<AddBusInformation> {
+  static const String OTHER = 'Other';
   late String _busNumber;
   late String _driverName;
   late String _driverNumber;
@@ -15,11 +16,14 @@ class _AddBusInformationState extends State<AddBusInformation> {
   late String _cleanerNumber;
   late String _routeFrom;
   late String _routeTo;
+  var _otherTravelAgencyName = null;
 
-  List<String> travellers = ['Ashoka', 'Konduskar', 'Balaji'];
+  List<String> travellers = ['Ashoka', 'Konduskar', 'Balaji', OTHER];
   late String _selectedTraveller = travellers[0];
 
   final GlobalKey<FormState> addBusInfoKey = GlobalKey<FormState>();
+
+  bool showOtherInputField = false;
 
   Widget _buildBusNumber() {
     return TextFormField(
@@ -132,6 +136,24 @@ class _AddBusInformationState extends State<AddBusInformation> {
     );
   }
 
+  Widget _buildOtherTextField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Travel Agency Name'),
+      validator: (String? value) {
+        if (value!.isEmpty) {
+          return 'Please enter travel agency name';
+        }
+      },
+      keyboardType: TextInputType.text,
+      onSaved: (String? value) {
+        _otherTravelAgencyName = value.toString();
+        setState(() {
+          travellers.add(value.toString());
+        });
+      },
+    );
+  }
+
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     return travellers.map((traveller) {
       return DropdownMenuItem(
@@ -147,6 +169,11 @@ class _AddBusInformationState extends State<AddBusInformation> {
         items: getDropDownMenuItems(),
         isExpanded: true,
         onChanged: (String? value) {
+          if (value == OTHER) {
+            showOtherInputField = true;
+          } else {
+            showOtherInputField = false;
+          }
           setState(() {
             _selectedTraveller = value.toString();
           });
@@ -166,6 +193,9 @@ class _AddBusInformationState extends State<AddBusInformation> {
     print(_routeFrom);
     print(_routeTo);
     print(_selectedTraveller);
+    if (_otherTravelAgencyName != null) {
+      print(_otherTravelAgencyName);
+    }
   }
 
   @override
@@ -192,6 +222,7 @@ class _AddBusInformationState extends State<AddBusInformation> {
                       height: 10,
                     ),
                     _buildTraveller(),
+                    if (showOtherInputField) _buildOtherTextField(),
                     SizedBox(
                       height: 50,
                     ),
