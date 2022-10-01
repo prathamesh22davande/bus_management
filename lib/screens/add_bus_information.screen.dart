@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AddBusInformation extends StatefulWidget {
   const AddBusInformation({super.key});
@@ -193,9 +195,22 @@ class _AddBusInformationState extends State<AddBusInformation> {
     print(_routeFrom);
     print(_routeTo);
     print(_selectedTraveller);
+
     if (_otherTravelAgencyName != null) {
       print(_otherTravelAgencyName);
     }
+
+    final newBus = new Bus(
+        busNumber: _busNumber,
+        driverName: _driverName,
+        driverPhoneNumber: _driverNumber,
+        cleanerName: _cleanerName,
+        cleanerPhoneNumber: _cleanerNumber,
+        travelsName: _selectedTraveller,
+        routeFrom: _routeFrom,
+        routeTo: _routeTo);
+
+    createBus(newBus);
   }
 
   @override
@@ -234,5 +249,60 @@ class _AddBusInformationState extends State<AddBusInformation> {
         ),
       ),
     );
+  }
+
+  Future createBus(Bus newBus) {
+    final busDocument = FirebaseFirestore.instance.collection('Bus');
+    return busDocument
+        .add(newBus.toMap())
+        .then((value) => showToastMessage("New Bus Added Successfully"))
+        .catchError((error) => showToastMessage("Bus Add Failed"));
+  }
+
+  void showToastMessage(String message) {
+    Fluttertoast.showToast(
+        backgroundColor: Colors.green,
+        msg: message, //message to show toast
+        toastLength: Toast.LENGTH_LONG, //duration for message to show
+        gravity: ToastGravity.BOTTOM, //where you want to show, top, bottom
+        timeInSecForIosWeb: 1, //for iOS only
+        //backgroundColor: Colors.red, //background Color for message
+        textColor: Colors.white, //message text color
+        fontSize: 16.0 //message font size
+        );
+  }
+}
+
+class Bus {
+  String busNumber;
+  String driverName;
+  String driverPhoneNumber;
+  String cleanerName;
+  String cleanerPhoneNumber;
+  String routeFrom;
+  String routeTo;
+  String travelsName;
+
+  Bus(
+      {required this.busNumber,
+      required this.driverName,
+      required this.driverPhoneNumber,
+      required this.cleanerName,
+      required this.cleanerPhoneNumber,
+      required this.routeFrom,
+      required this.routeTo,
+      required this.travelsName}) {}
+
+  Map<String, dynamic> toMap() {
+    return {
+      "busNumber": this.busNumber,
+      "driverName": this.driverName,
+      "driverPhoneNumber": this.driverPhoneNumber,
+      "cleanerName": this.cleanerName,
+      "cleanerPhoneNumber": this.cleanerPhoneNumber,
+      "routeFrom": this.routeFrom,
+      "routeTo": this.routeTo,
+      "travelsName": this.travelsName
+    };
   }
 }
