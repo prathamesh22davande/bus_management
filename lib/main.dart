@@ -1,7 +1,9 @@
+import 'package:bus_management/screens/BusDetail.screen.dart';
 import 'package:bus_management/screens/Buses.screen.dart';
 import 'package:bus_management/screens/Notification.screen.dart';
 import 'package:bus_management/screens/Travels.screen.dart';
 import 'package:flutter/material.dart';
+import './screens/add_bus_information.screen.dart';
 
 import './screens/home.screen.dart';
 import './widgets/BottomNav.dart';
@@ -38,7 +40,6 @@ class _MyWidgetState extends State<MyWidget> {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: 'Poppins',
       ),
       title: 'Demo App',
       home: Scaffold(
@@ -57,7 +58,7 @@ class _MyWidgetState extends State<MyWidget> {
         ),
         floatingActionButton: _bottomNavIndex != 0
             ? FloatingActionButton(
-                onPressed: null,
+                onPressed: () {},
                 child: Icon(Icons.add),
               )
             : null,
