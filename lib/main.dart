@@ -1,13 +1,15 @@
 import 'package:bus_management/screens/Buses.screen.dart';
 import 'package:bus_management/screens/Notification.screen.dart';
 import 'package:bus_management/screens/Travels.screen.dart';
+import 'package:bus_management/screens/add_bus_information.screen.dart';
+// import 'package:cloud_firestore_web/cloud_firestore_web.dart';
 import 'package:flutter/material.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import './screens/home.screen.dart';
 import './widgets/BottomNav.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,12 +65,21 @@ class _MyWidgetState extends State<MyWidget> {
           ],
         ),
         floatingActionButton: _bottomNavIndex != 0
-            ? FloatingActionButton(
-                onPressed: null,
-                child: Icon(Icons.add),
-              )
+            ? Builder(builder: (context) {
+                return FloatingActionButton(
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => AddBusInformation()))),
+                  child: Icon(Icons.add),
+                );
+              })
             : null,
       ),
     );
   }
+
+
 }
+
+

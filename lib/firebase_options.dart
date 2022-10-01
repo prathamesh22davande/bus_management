@@ -17,15 +17,24 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,40 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDLykAWFXYrBEi_jpDg9GU_Q9dZwZnLZSw',
-    appId: '1:939268522452:web:b30470462d1de4c7f79641',
-    messagingSenderId: '939268522452',
-    projectId: 'busmanagement-ac95a',
-    authDomain: 'busmanagement-ac95a.firebaseapp.com',
-    storageBucket: 'busmanagement-ac95a.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCyAveUB-WBpKRogreqo8m37XUQ9z_FitM',
     appId: '1:939268522452:android:bd9225e62e6ea253f79641',
     messagingSenderId: '939268522452',
     projectId: 'busmanagement-ac95a',
     storageBucket: 'busmanagement-ac95a.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCC7hkLdsJzMumVIp3Fp0SR75Ph7jzStSw',
-    appId: '1:939268522452:ios:408c96d4a7e67e0af79641',
-    messagingSenderId: '939268522452',
-    projectId: 'busmanagement-ac95a',
-    storageBucket: 'busmanagement-ac95a.appspot.com',
-    iosClientId: '939268522452-57ien6avt4kp1gkl4u6fbilqhs9p8j0j.apps.googleusercontent.com',
-    iosBundleId: 'com.example.busManagement',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCC7hkLdsJzMumVIp3Fp0SR75Ph7jzStSw',
-    appId: '1:939268522452:ios:408c96d4a7e67e0af79641',
-    messagingSenderId: '939268522452',
-    projectId: 'busmanagement-ac95a',
-    storageBucket: 'busmanagement-ac95a.appspot.com',
-    iosClientId: '939268522452-57ien6avt4kp1gkl4u6fbilqhs9p8j0j.apps.googleusercontent.com',
-    iosBundleId: 'com.example.busManagement',
   );
 }
