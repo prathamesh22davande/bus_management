@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>939268522452-57ien6avt4kp1gkl4u6fbilqhs9p8j0j.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.939268522452-57ien6avt4kp1gkl4u6fbilqhs9p8j0j</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCC7hkLdsJzMumVIp3Fp0SR75Ph7jzStSw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>939268522452</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.busManagement</string>
+	<key>PROJECT_ID</key>
+	<string>busmanagement-ac95a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>busmanagement-ac95a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:939268522452:ios:408c96d4a7e67e0af79641</string>
+</dict>
+</plist>
