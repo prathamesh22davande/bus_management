@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:getwidget/getwidget.dart';
 import '../utility/Utlity.dart';
 import '../models/Bus.dart';
 
@@ -14,11 +18,13 @@ class AddBusInformation extends StatefulWidget {
 class _AddBusInformationState extends State<AddBusInformation> {
   static const String OTHER = 'Other';
 
+  final CollectionReference _travellersCollection =
+      FirebaseFirestore.instance.collection('travels');
+
   Map<String, String> busInformation = Map();
   var _otherTravelAgencyName = null;
-
-  List<String> travellers = ['Ashoka', 'Konduskar', 'Balaji', OTHER];
-  late String _selectedTraveller = travellers[0];
+  List<String> travellers = <String>[];
+  String? _selectedTraveller;
 
   final GlobalKey<FormState> addBusInfoKey = GlobalKey<FormState>();
 
@@ -48,7 +54,6 @@ class _AddBusInformationState extends State<AddBusInformation> {
     );
   }
 
-
   Widget _buildOtherTextField() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Travel Agency Name'),
@@ -69,6 +74,7 @@ class _AddBusInformationState extends State<AddBusInformation> {
 
   Widget _buildTraveller() {
     return DropdownButton(
+        hint: Text('Select travels name'),
         value: _selectedTraveller,
         items: getDropDownMenuItems(),
         isExpanded: true,
@@ -88,7 +94,7 @@ class _AddBusInformationState extends State<AddBusInformation> {
     return travellers.map((traveller) {
       return DropdownMenuItem(
         child: Text(traveller),
-        value: traveller,
+        value: traveller.isNotEmpty ? traveller : null,
       );
     }).toList();
   }
@@ -105,7 +111,9 @@ class _AddBusInformationState extends State<AddBusInformation> {
         driverPhoneNumber: busInformation['driverNumber'].toString(),
         cleanerName: busInformation['cleanerName'].toString(),
         cleanerPhoneNumber: busInformation['cleanerNumber'].toString(),
-        travelsName: _selectedTraveller,
+        travelsName: _selectedTraveller == OTHER
+            ? _otherTravelAgencyName
+            : _selectedTraveller.toString(),
         routeFrom: busInformation['routeFrom'].toString(),
         routeTo: busInformation['routeTo'].toString());
 
@@ -117,67 +125,99 @@ class _AddBusInformationState extends State<AddBusInformation> {
     return Scaffold(
       body: Container(
         margin: EdgeInsets.all(24),
-        child: Form(
-          key: addBusInfoKey,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: SingleChildScrollView(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _buildTextField(
-                        labelText: 'Bus Number',
-                        labelVar: 'busNumber',
-                        busInfo: busInformation),
-                    _buildTextField(
-                        labelText: 'Driver Name',
-                        labelVar: 'driverName',
-                        busInfo: busInformation),
-                    _buildTextField(
-                        labelText: 'Driver Number',
-                        labelVar: 'driverNumber',
-                        busInfo: busInformation,
-                        isPhoneValidationRequired: true),
-                    _buildTextField(
-                        labelText: 'Cleaner Name',
-                        labelVar: 'cleanerName',
-                        busInfo: busInformation),
-                    _buildTextField(
-                        labelText: 'Cleaner Number',
-                        labelVar: 'cleanerNumber',
-                        busInfo: busInformation,
-                        isPhoneValidationRequired: true),
-                    _buildTextField(
-                        labelText: 'Route From',
-                        labelVar: 'routeFrom',
-                        busInfo: busInformation),
-                    _buildTextField(
-                        labelText: 'Route To',
-                        labelVar: 'routeTo',
-                        busInfo: busInformation),
-                    SizedBox(
-                      height: 10,
+        child: StreamBuilder(
+            stream: _travellersCollection.snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasData) {
+                travellers = snapshot.data!.docs
+                    .map((e) => e['name'].toString())
+                    .toList();
+                travellers.add('Other');
+                return Form(
+                  key: addBusInfoKey,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: SingleChildScrollView(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            _buildTextField(
+                                labelText: 'Bus Number',
+                                labelVar: 'busNumber',
+                                busInfo: busInformation),
+                            _buildTextField(
+                                labelText: 'Driver Name',
+                                labelVar: 'driverName',
+                                busInfo: busInformation),
+                            _buildTextField(
+                                labelText: 'Driver Number',
+                                labelVar: 'driverNumber',
+                                busInfo: busInformation,
+                                isPhoneValidationRequired: true),
+                            _buildTextField(
+                                labelText: 'Cleaner Name',
+                                labelVar: 'cleanerName',
+                                busInfo: busInformation),
+                            _buildTextField(
+                                labelText: 'Cleaner Number',
+                                labelVar: 'cleanerNumber',
+                                busInfo: busInformation,
+                                isPhoneValidationRequired: true),
+                            _buildTextField(
+                                labelText: 'Route From',
+                                labelVar: 'routeFrom',
+                                busInfo: busInformation),
+                            _buildTextField(
+                                labelText: 'Route To',
+                                labelVar: 'routeTo',
+                                busInfo: busInformation),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            _buildTraveller(),
+                            if (showOtherInputField) _buildOtherTextField(),
+                            SizedBox(
+                              height: 50,
+                            ),
+                            ElevatedButton(
+                                onPressed: _addBusInformation,
+                                child: Text('Add Bus'))
+                          ]),
                     ),
-                    _buildTraveller(),
-                    if (showOtherInputField) _buildOtherTextField(),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    ElevatedButton(
-                        onPressed: _addBusInformation, child: Text('Add Bus'))
-                  ]),
-            ),
-          ),
-        ),
+                  ),
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
+            }),
       ),
     );
   }
 
   Future createBus(Bus newBus) {
     final busDocument = FirebaseFirestore.instance.collection('Bus');
-    return busDocument
-        .add(newBus.toMap())
-        .then((value) => Utility.showToastMessage("New Bus Added Successfully"))
-        .catchError((error) => Utility.showToastMessage("Bus Add Failed"));
+    return busDocument.add(newBus.toMap()).then((value) {
+      if (_selectedTraveller == OTHER) {
+        createTravelAgency(newBus.travelsName).then((value) {
+          if (value == true) {
+            Utility.showToastMessage("New Bus Added Successfully");
+            Navigator.pop(context);
+          } else {
+            throw new Error();
+          }
+        }).catchError((error) => Utility.showToastMessage("Bus Add Failed"));
+      } else {
+        Utility.showToastMessage("New Bus Added Successfully");
+        Navigator.pop(context);
+      }
+    }).catchError((error) => Utility.showToastMessage("Bus Add Failed"));
+  }
+
+  Future createTravelAgency(String travelName) {
+    final travelDocument = FirebaseFirestore.instance.collection('travels');
+    return travelDocument.add({'name': travelName}).then((value) {
+      Utility.showToastMessage("Travel added");
+      return true;
+    }).catchError((error) => false);
   }
 }
