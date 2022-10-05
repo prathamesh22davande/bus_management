@@ -58,12 +58,7 @@ class _MyWidgetState extends State<MyWidget> {
           currentIdx: _bottomNavIndex,
           changeNav: changeNavigation,
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            navWidgets.elementAt(_bottomNavIndex),
-          ],
-        ),
+        body: navWidgets.elementAt(_bottomNavIndex),
         floatingActionButton: _bottomNavIndex != 0
             ? Builder(builder: (context) {
                 return FloatingActionButton(
