@@ -1,3 +1,4 @@
+import 'package:bus_management/models/Bus.dart';
 import 'package:bus_management/screens/BusDetail.screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -56,32 +57,63 @@ class _BusesScreenState extends State<BusesScreen> {
                     streamSnapshot.data!.docs[index];
                 return Container(
                   child: GestureDetector(
+                    onTap: () => showDetailsClick(documentSnapshot),
                     child: Card(
                       color: Color(0xfff1f4ff),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: Text(
-                                  // items[index]['busNo'].toString(),
-                                  streamSnapshot.data!.docs[index]['busNumber']
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      fontFamily: 'Poppins'),
-                                ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Text(
+                                      // items[index]['busNo'].toString(),
+                                      streamSnapshot
+                                          .data!.docs[index]['busNumber']
+                                          .toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          fontFamily: 'Poppins'),
+                                    ),
+                                  ),
+                                  Text(
+                                    "Driver Name : " +
+                                        streamSnapshot.data!.docs[index]
+                                            ['driverName'],
+                                    style: TextStyle(color: Color(0xff818488)),
+                                  ),
+                                  Text(
+                                    "Driver Name : " +
+                                        streamSnapshot.data!.docs[index]
+                                            ['driverPhoneNumber'],
+                                    style: TextStyle(color: Color(0xff818488)),
+                                  ),
+                                  Text(
+                                    streamSnapshot.data!.docs[index]
+                                            ['routeFrom'] +
+                                        ' - ' +
+                                        streamSnapshot.data!.docs[index]
+                                            ['routeTo'],
+                                    style: TextStyle(color: Color(0xff818488)),
+                                  )
+                                ]),
+                            Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.black54,
+                              child: Text(
+                                '10',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                streamSnapshot.data!.docs[index]['routeFrom'] +
-                                    ' - ' +
-                                    streamSnapshot.data!.docs[index]['routeTo'],
-                                style: TextStyle(color: Color(0xff818488)),
-                              )
-                            ]),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -95,5 +127,22 @@ class _BusesScreenState extends State<BusesScreen> {
         );
       },
     );
+  }
+
+  showDetailsClick(documentSnapshot) {
+    Map busInfo = Map();
+
+    busInfo['busNumber'] = documentSnapshot['busNumber'];
+    busInfo['driverName'] = documentSnapshot['driverName'];
+    busInfo['driverPhoneNumber'] = documentSnapshot['driverPhoneNumber'];
+    busInfo['cleanerName'] = documentSnapshot['cleanerName'];
+    busInfo['cleanerPhoneNumber'] = documentSnapshot['cleanerPhoneNumber'];
+    busInfo['routeFrom'] = documentSnapshot['routeFrom'];
+    busInfo['routeTo'] = documentSnapshot['routeTo'];
+    busInfo['travelsName'] = documentSnapshot['travelsName'];
+
+    Bus bus = Bus.fromDocumentSnapshot(documentSnapshot: documentSnapshot);
+    Navigator.push(context,
+        MaterialPageRoute(builder: ((context) => BusDetailsScreen(bus: bus))));
   }
 }

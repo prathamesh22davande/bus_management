@@ -1,15 +1,16 @@
+import 'package:bus_management/models/Bus.dart';
 import 'package:flutter/material.dart';
 
 class BusDetailsScreen extends StatelessWidget {
-  Map busInfo;
-  BusDetailsScreen({required this.busInfo});
+  Bus bus;
+  BusDetailsScreen({required this.bus});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Bus Details' + busInfo['busNo']),
+          title: Text('Bus Details' + bus.busNumber),
         ),
         body: Container(
           padding: EdgeInsets.all(20),
@@ -17,7 +18,7 @@ class BusDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                busInfo['busNo'],
+                bus.busNumber,
                 style: TextStyle(
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold,
@@ -40,7 +41,7 @@ class BusDetailsScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 18),
                       ),
                       Text(
-                        busInfo['driverName'],
+                        bus.driverName,
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       )
@@ -54,7 +55,7 @@ class BusDetailsScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 18),
                       ),
                       Text(
-                        busInfo['driverPhone'],
+                        bus.driverPhoneNumber,
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       )
@@ -78,7 +79,7 @@ class BusDetailsScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 18),
                       ),
                       Text(
-                        busInfo['cleanerName'],
+                        bus.cleanerName,
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       )
@@ -92,7 +93,7 @@ class BusDetailsScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 18),
                       ),
                       Text(
-                        busInfo['cleanerPhone'],
+                        bus.cleanerPhoneNumber,
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       )
@@ -100,7 +101,7 @@ class BusDetailsScreen extends StatelessWidget {
                   ),
                 ]),
               ),
-              Text(busInfo['routeFrom'] + ' - ' + busInfo['routeTo']),
+              Text(bus.routeFrom + ' - ' + bus.routeTo),
             ],
           ),
         ),
