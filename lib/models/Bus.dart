@@ -1,12 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Bus {
-  String busNumber;
-  String driverName;
-  String driverPhoneNumber;
-  String cleanerName;
-  String cleanerPhoneNumber;
-  String routeFrom;
-  String routeTo;
-  String travelsName;
+  late String busNumber;
+  late String driverName;
+  late String driverPhoneNumber;
+  late String cleanerName;
+  late String cleanerPhoneNumber;
+  late String routeFrom;
+  late String routeTo;
+  late String travelsName;
 
   Bus(
       {required this.busNumber,
@@ -17,6 +19,17 @@ class Bus {
       required this.routeFrom,
       required this.routeTo,
       required this.travelsName}) {}
+
+  Bus.fromDocumentSnapshot({required DocumentSnapshot documentSnapshot}) {
+    busNumber = documentSnapshot['busNumber'];
+    driverName = documentSnapshot['driverName'];
+    driverPhoneNumber = documentSnapshot['driverPhoneNumber'];
+    cleanerName = documentSnapshot['cleanerName'];
+    cleanerPhoneNumber = documentSnapshot['cleanerPhoneNumber'];
+    routeFrom = documentSnapshot['routeFrom'];
+    routeTo = documentSnapshot['routeTo'];
+    travelsName = documentSnapshot['travelsName'];
+  }
 
   Map<String, dynamic> toMap() {
     return {
